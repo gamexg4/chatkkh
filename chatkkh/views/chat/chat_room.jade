@@ -1,0 +1,18 @@
+extends chat_layout
+
+block content
+	div(data-role='page')
+		div(data-role='header')
+			h1 #{room_name}
+		div(data-role='content')
+			ul(id='msg', data-role='listview', data-inset='true')
+			div( data-role='navbar')
+				ul
+					li(style='width:10%;height:100px;')
+						input(type='text',id='name',onkeypress='if (13 == event.keyCode) chat.send_msg();',style='width:90%;height:80%;')
+					li(style='width:80%;height:100px;')
+						input(type='text',id='content',onkeypress='if (13 == event.keyCode) chat.send_msg();',style='height:80%;')
+					li(style='width:10%;height:100px;')
+						input(type='button',,onclick='chat.send_msg();',value='click',style='height:80%;')
+			input(type='hidden',id='room_name',value='#{room_name}')			
+	script(type='text/javascript') $(document).ready(function(){chat.init()});

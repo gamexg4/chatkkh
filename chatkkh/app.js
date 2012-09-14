@@ -4,8 +4,7 @@
  */
 
 var express = require('express')
-  , routes = require('./routes')
-  , user = require('./routes/user')
+  , routes = require('./routes')  
   , http = require('http')
   , path = require('path');
 
@@ -28,8 +27,51 @@ app.configure('development', function(){
 });
 
 app.get('/', routes.index);
-app.get('/users', user.list);
 
-http.createServer(app).listen(app.get('port'), function(){
+/* chat */
+app.get('/chat', function(req, res){
+	res.render('chat');
+});
+
+app.get('/chat/chat_room', function(req, res){	
+	res.render('chat/chat_room',{room_name:req.param('room_name')});
+});
+/* chat */
+
+var server = http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });
+
+var io = require('socket.io').listen(server);
+
+io.sockets.on('connection', function(socket){
+	/* chat */
+	socket.on('send_msg', function(data){
+		var room_name = data.room_name;
+		var name = data.name;
+		var date = data.date;
+		var msg = data.msg;
+		
+		var param = {msg:msg,name:name,date:date}
+		
+		io.sockets.in(room_name).emit('recv_msg',param);		
+	});
+	
+	socket.on('join_room', function(data){		
+		var room_name = data.room_name;		
+		socket.join(room_name);		
+	});
+	
+	socket.on('room_list', function(){
+		var room_list = [];		
+		console.log(io.sockets.manager.rooms);		
+		for(var item in io.sockets.manager.rooms){			
+			if(item) room_list.push(item.replace('/',''));
+		}
+		socket.emit('room_list', room_list);
+	});
+	/* chat */
+});
+
+
+

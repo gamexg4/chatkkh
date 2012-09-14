@@ -1,0 +1,10 @@
+extends chat_layout
+
+block content
+	div(data-role='page')
+		div(data-role='header')
+			h1 chat
+		div(data-role='content')
+			input(type='button', value='create room', onclick='room.create_room();')			
+			ul(id='room_list', data-role='listview', data-inset='true')			
+	script(type='text/javascript') $(document).ready(function(){room.init()});
