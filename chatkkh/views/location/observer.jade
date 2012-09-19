@@ -1,0 +1,16 @@
+doctype 5
+html
+	head
+		title location test
+		meta(charset="utf8")
+		meta(name='viewport',content='width=device-width,initial-scale=1.0, user-scalable=no')
+		style 
+			* {margin:0px;padding:0px}
+			html, body, #map {height:100%;}									 
+		script(type='text/javascript',src='http://code.jquery.com/jquery-1.7.1.min.js')		
+		script(src='https://maps.google.com/maps/api/js?sensor=false');
+		script(type='text/javascript',src='/socket.io/socket.io.js')
+		script(type='text/javascript',src='/javascripts/location.js')
+		script(type='text/javascript') $(document).ready(function(){obsever.init();});
+	body
+		div(id='map_canvas', style='height:100%')

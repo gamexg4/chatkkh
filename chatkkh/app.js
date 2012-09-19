@@ -38,6 +38,27 @@ app.get('/chat/chat_room', function(req, res){
 });
 /* chat */
 
+/* location */
+app.get('/tracker', function(req, res){
+    res.render('location/tracker');
+});
+
+app.get('/observer', function(req, res){
+	res.render('location/observer');
+});
+
+app.get('/showdata', function(req, res){
+	//client.query('select * from locations where name = ?',[req.query.name], function(err, data){	
+	
+	var data = room_list[req.query.name]['list'];
+	var cnt = Object.keys(room_list[req.query.name]['list']).length;
+		
+	res.writeHead(200, {'Content-Type':'application/json'});
+	res.end(JSON.stringify(data));		
+	//});
+});
+/* location */
+
 var server = http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });
@@ -71,6 +92,35 @@ io.sockets.on('connection', function(socket){
 		socket.emit('room_list', room_list);
 	});
 	/* chat */
+    
+    /* location */
+    socket.on('join', function(data){		
+		socket.join(data);
+	});
+	
+	socket.on('location', function(data){				
+		
+		if(!room_list[data.name]) {
+			room_list[data.name] = new Object();
+			room_list[data.name]['list'] = new Object();			
+		}
+
+		var cnt = Object.keys(room_list[data.name]['list']).length ? Object.keys(room_list[data.name]['list']).length : 0;
+		
+		if(cnt == 3) {
+			data.latitude = 38;
+			data.longitude = 128;			
+		}
+		
+		room_list[data.name]['list'][cnt] = new Object();
+		room_list[data.name]['list'][cnt]['latitude'] = data.latitude;
+		room_list[data.name]['list'][cnt]['longitude'] = data.longitude;		
+		
+		
+		console.log('######################################################################');
+		io.sockets.in(data.name).emit('receive', {latitude:data.latitude,longitude:data.longitude});
+	});
+	/* location */
 });
 
 

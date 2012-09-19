@@ -1,0 +1,22 @@
+doctype 5
+html
+	head
+		title location test
+		meta(charset="utf8")
+		meta(name='viewport',content='width=device-width,inital-scale=1')
+		link(rel='stylesheet', href='http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css');							 
+		script(type='text/javascript',src='http://code.jquery.com/jquery-1.7.1.min.js')
+		script(src='http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js');
+		script(type='text/javascript',src='/socket.io/socket.io.js')
+		script(type='text/javascript',src='/javascripts/location.js')
+		script(type='text/javascript') $(document).ready(function(){});
+	body
+		div(data-role='page')
+			div(data-role='header')
+				h1 Location Tracker
+			div(data-role='content')
+				div(data-role='fieldcontain')
+					label(for='textinput') name
+					input(type='text',id='textinput')
+				a(href='javascript:tracker.tracker_start();',data-role='button') start tracker
+				ul(id='listview', data-role='listview', data-inset='true')		
