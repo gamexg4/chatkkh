@@ -65,6 +65,8 @@ var server = http.createServer(app).listen(app.get('port'), function(){
 
 var io = require('socket.io').listen(server);
 
+var room_list = new Object();
+
 io.sockets.on('connection', function(socket){
 	/* chat */
 	socket.on('send_msg', function(data){
